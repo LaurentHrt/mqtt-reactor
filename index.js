@@ -45,8 +45,16 @@ mqttClient.on("connect", () => {
 mqttClient.on("message", async (topic, messageBuffer) => {
   try {
     const message = messageBuffer.toString();
+    const parsedPayload = JSON.parse(message);
 
-    if (isDuplicate(topic, message)) {
+    const payload = {
+      temperature: parsedPayload.temperature,
+      humidity: parsedPayload.humidity,
+      energy: parsedPayload.energy,
+      state: parsedPayload.state,
+    };
+
+    if (isDuplicate(topic, payload)) {
       console.log("Duplicated message ignored:", topic);
       return;
     }
@@ -56,16 +64,12 @@ mqttClient.on("message", async (topic, messageBuffer) => {
     // topic format: zigbee2mqtt/home/ROOM/TYPE/LOCATION
     // example: zigbee2mqtt/home/chambre/lumiere/lit
     const [_, __, room, dataType, location] = topic.split("/");
-    const payload = JSON.parse(message);
     const data = {
       deviceId: `${room}-${dataType}-${location}`,
       timestamp: new Date().toISOString(),
       dataType,
       room,
-      temperature: payload.temperature,
-      humidity: payload.humidity,
-      energy: payload.energy,
-      state: payload.state,
+      ...payload,
     };
     const command = new PutCommand({ TableName: tableName, Item: data });
     await docClient.send(command);
@@ -75,10 +79,11 @@ mqttClient.on("message", async (topic, messageBuffer) => {
   }
 });
 
-function isDuplicate(topic, message) {
-  if (deduplicationCache.get(topic) === message) {
+function isDuplicate(topic, payload) {
+  const value = JSON.stringify(payload);
+  if (deduplicationCache.get(topic) === value) {
     return true;
   }
-  deduplicationCache.set(topic, message);
+  deduplicationCache.set(topic, value);
   return false;
 }
