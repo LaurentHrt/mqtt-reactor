@@ -52,6 +52,7 @@ mqttClient.on("message", async (topic, messageBuffer) => {
       humidity: parsedPayload.humidity,
       energy: parsedPayload.energy,
       state: parsedPayload.state,
+      occupancy: parsedPayload.occupancy,
     };
 
     if (isDuplicate(topic, payload)) {
