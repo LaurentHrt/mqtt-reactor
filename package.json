@@ -13,6 +13,7 @@
     "@aws-sdk/client-dynamodb": "^3.724.0",
     "@aws-sdk/credential-providers": "^3.723.0",
     "@aws-sdk/lib-dynamodb": "^3.724.0",
+    "dotenv": "^16.4.7",
     "mqtt": "^5.10.3"
   }
 }
