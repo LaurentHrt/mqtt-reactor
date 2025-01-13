@@ -55,6 +55,8 @@ mqttClient.on("message", async (topic, messageBuffer) => {
       occupancy: parsedPayload.occupancy,
       current: parsedPayload.current,
       power: parsedPayload.power,
+      moving: parsedPayload.moving,
+      position: parsedPayload.position,
     };
 
     if (isDuplicate(topic, payload)) {
