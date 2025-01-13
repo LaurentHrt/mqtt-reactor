@@ -53,7 +53,6 @@ mqttClient.on("message", async (topic, messageBuffer) => {
       energy: parsedPayload.energy,
       state: parsedPayload.state,
       occupancy: parsedPayload.occupancy,
-      action: parsedPayload.action,
       current: parsedPayload.current,
       power: parsedPayload.power,
     };
