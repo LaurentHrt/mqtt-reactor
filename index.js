@@ -59,34 +59,71 @@ mqttClient.on("message", async (topic, messageBuffer) => {
       position: parsedPayload.position,
     };
 
-    if (isDuplicate(topic, payload)) {
-      console.log("Duplicated message ignored:", topic);
+    // topic format: zigbee2mqtt/home/ROOM/TYPE/LOCATION
+    // example: zigbee2mqtt/home/chambre/lumiere/lit
+
+    const commands = [];
+    const [_, __, room, dataType, location] = topic.split("/");
+
+    if (topic === "zigbee2mqtt/home/sdb/lumiere/dual") {
+      commands.push({
+        deviceId: `${room}-${dataType}-${"plafond"}`,
+        ...payload,
+        state: parsedPayload.state_l1,
+      });
+      commands.push({
+        deviceId: `${room}-${dataType}-${"miroir"}`,
+        ...payload,
+        state: parsedPayload.state_l2,
+      });
+    } else if (topic === "zigbee2mqtt/home/cuisine/lumiere/dual") {
+      commands.push({
+        deviceId: `${room}-${dataType}-${"planDeTravail"}`,
+        ...payload,
+        state: parsedPayload.state_l1,
+      });
+      commands.push({
+        deviceId: `${room}-${dataType}-${"plafond"}`,
+        ...payload,
+        state: parsedPayload.state_l2,
+      });
+    } else {
+      commands.push({
+        deviceId: `${room}-${dataType}-${location}`,
+        ...payload,
+      });
+    }
+
+    const filteredCommands = commands.filter(
+      (command) => !isDuplicate(command),
+    );
+
+    if (filteredCommands.length <= 0) {
       return;
     }
 
     console.log("Writting to DynamoDB:", topic);
-
-    // topic format: zigbee2mqtt/home/ROOM/TYPE/LOCATION
-    // example: zigbee2mqtt/home/chambre/lumiere/lit
-    const [_, __, room, dataType, location] = topic.split("/");
-    const data = {
-      deviceId: `${room}-${dataType}-${location}`,
-      timestamp: new Date().toISOString(),
-      ...payload,
-    };
-    const command = new PutCommand({ TableName: tableName, Item: data });
-    await docClient.send(command);
+    const commandsExecution = filteredCommands.map((command) =>
+      docClient.send(
+        new PutCommand({
+          TableName: tableName,
+          Item: { ...command, timestamp: new Date().toISOString() },
+        }),
+      ),
+    );
+    await Promise.all(commandsExecution);
     console.log("Data written to DynamoDB:", topic);
   } catch (err) {
     console.error("Error processing message:", err);
   }
 });
 
-function isDuplicate(topic, payload) {
-  const value = JSON.stringify(payload);
-  if (deduplicationCache.get(topic) === value) {
+function isDuplicate(command) {
+  const value = JSON.stringify(command);
+  if (deduplicationCache.get(command.deviceId) === value) {
+    console.log("Duplicated message ignored:", command.deviceId);
     return true;
   }
-  deduplicationCache.set(topic, value);
+  deduplicationCache.set(command.deviceId, value);
   return false;
 }
