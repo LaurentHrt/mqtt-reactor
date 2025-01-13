@@ -72,8 +72,6 @@ mqttClient.on("message", async (topic, messageBuffer) => {
     const data = {
       deviceId: `${room}-${dataType}-${location}`,
       timestamp: new Date().toISOString(),
-      dataType,
-      room,
       ...payload,
     };
     const command = new PutCommand({ TableName: tableName, Item: data });
