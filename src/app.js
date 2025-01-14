@@ -1,6 +1,7 @@
 import { initializeMQTTClient } from "./mqtt.js";
 import { writeToDynamoDB } from "./dynamodb.js";
 import { isDuplicate } from "./deduplication.js";
+import { prepareDBEntries } from "./prepareDBEntries.js";
 import config from "./config.js";
 
 const mqttClient = initializeMQTTClient(async (topic, message) => {
@@ -24,59 +25,6 @@ async function processMessage(topic, message) {
   } catch (err) {
     console.error("Error processing message:", err);
   }
-}
-
-function prepareDBEntries(topic, payload) {
-  const [, , room, dataType, location] = topic.split("/");
-  const entries = [];
-
-  const commonData = {
-    temperature: payload.temperature,
-    humidity: payload.humidity,
-    energy: payload.energy,
-    state: payload.state,
-    occupancy: payload.occupancy,
-    current: payload.current,
-    power: payload.power,
-    moving: payload.moving,
-    position: payload.position,
-    action: payload.action,
-  };
-
-  if (topic === "zigbee2mqtt/home/sdb/lumiere/dual") {
-    entries.push(
-      {
-        deviceId: `${room}-${dataType}-plafond`,
-        ...commonData,
-        state: payload.state_l1,
-      },
-      {
-        deviceId: `${room}-${dataType}-miroir`,
-        ...commonData,
-        state: payload.state_l2,
-      },
-    );
-  } else if (topic === "zigbee2mqtt/home/cuisine/lumiere/dual") {
-    entries.push(
-      {
-        deviceId: `${room}-${dataType}-planDeTravail`,
-        ...commonData,
-        state: payload.state_l1,
-      },
-      {
-        deviceId: `${room}-${dataType}-plafond`,
-        ...commonData,
-        state: payload.state_l2,
-      },
-    );
-  } else {
-    entries.push({
-      deviceId: `${room}-${dataType}-${location}`,
-      ...commonData,
-    });
-  }
-
-  return entries;
 }
 
 process.on("SIGTERM", () => {
