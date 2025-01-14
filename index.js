@@ -90,6 +90,7 @@ function prepareCommands(topic, payload) {
     power: payload.power,
     moving: payload.moving,
     position: payload.position,
+    action: payload.action,
   };
 
   if (topic === "zigbee2mqtt/home/sdb/lumiere/dual") {
@@ -146,6 +147,10 @@ async function writeToDynamoDB(commands, topic) {
 }
 
 function isDuplicate(command) {
+  // No cache for buttons
+  if (command.deviceId.includes("bouton")) {
+    return false;
+  }
   const value = JSON.stringify(command);
   if (deduplicationCache.get(command.deviceId) === value) {
     console.log("Duplicated message ignored:", command.deviceId);
