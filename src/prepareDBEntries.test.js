@@ -19,44 +19,60 @@ describe("prepareDBEntries", () => {
     ]);
   });
 
-  it("should handle the dual light topic for sdb correctly", () => {
-    const topic = "zigbee2mqtt/home/sdb/lumiere/dual";
-    const payload = {
-      state_l1: "ON",
-      state_l2: "OFF",
-    };
+  describe("dual light", () => {
+    it("should handle the dual light topic for sdb correctly", () => {
+      const topic = "zigbee2mqtt/home/sdb/lumiere/dual";
+      const payload = {
+        state_l1: "ON",
+        state_l2: "OFF",
+        power: 5,
+        energy: 10,
+      };
 
-    const result = prepareDBEntries(topic, payload);
-    expect(result).toEqual([
-      {
-        deviceId: "sdb-lumiere-plafond",
-        state: "ON",
-      },
-      {
-        deviceId: "sdb-lumiere-miroir",
-        state: "OFF",
-      },
-    ]);
-  });
+      const result = prepareDBEntries(topic, payload);
+      expect(result).toEqual([
+        {
+          deviceId: "sdb-lumiere-plafond",
+          state: "ON",
+        },
+        {
+          deviceId: "sdb-lumiere-miroir",
+          state: "OFF",
+        },
+        {
+          deviceId: "sdb-lumiere-dual",
+          power: 5,
+          energy: 10,
+        },
+      ]);
+    });
 
-  it("should handle the dual light topic for cuisine correctly", () => {
-    const topic = "zigbee2mqtt/home/cuisine/lumiere/dual";
-    const payload = {
-      state_l1: "ON",
-      state_l2: "OFF",
-    };
+    it("should handle the dual light topic for cuisine correctly", () => {
+      const topic = "zigbee2mqtt/home/cuisine/lumiere/dual";
+      const payload = {
+        state_l1: "ON",
+        state_l2: "OFF",
+        power: 5,
+        energy: 10,
+      };
 
-    const result = prepareDBEntries(topic, payload);
-    expect(result).toEqual([
-      {
-        deviceId: "cuisine-lumiere-planDeTravail",
-        state: "ON",
-      },
-      {
-        deviceId: "cuisine-lumiere-plafond",
-        state: "OFF",
-      },
-    ]);
+      const result = prepareDBEntries(topic, payload);
+      expect(result).toEqual([
+        {
+          deviceId: "cuisine-lumiere-planDeTravail",
+          state: "ON",
+        },
+        {
+          deviceId: "cuisine-lumiere-plafond",
+          state: "OFF",
+        },
+        {
+          deviceId: "cuisine-lumiere-dual",
+          power: 5,
+          energy: 10,
+        },
+      ]);
+    });
   });
 
   it("should return an empty array for an invalid topic", () => {
