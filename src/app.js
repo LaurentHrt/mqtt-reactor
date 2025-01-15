@@ -2,7 +2,6 @@ import { initializeMQTTClient } from "./mqtt.js";
 import { writeToDynamoDB } from "./dynamodb.js";
 import { isDuplicate } from "./deduplication.js";
 import { prepareDBEntries } from "./prepareDBEntries.js";
-import config from "./config.js";
 
 const mqttClient = initializeMQTTClient(async (topic, message) => {
   processMessage(topic, message);
@@ -14,8 +13,7 @@ async function processMessage(topic, message) {
     const entries = prepareDBEntries(topic, payload);
 
     const entriesWithoutDuplicated = entries.filter(
-      (command) =>
-        !isDuplicate(command.deviceId, command, config.deduplicationTTL),
+      (entry) => !isDuplicate(entry.deviceId, entry),
     );
 
     if (entriesWithoutDuplicated.length) {
