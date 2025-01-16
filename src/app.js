@@ -1,29 +1,10 @@
 import { initializeMQTTClient } from "./mqtt.js";
 import { writeToDynamoDB } from "./dynamodb.js";
-import { isDuplicate } from "./deduplication.js";
-import { prepareDBEntries } from "./prepareDBEntries.js";
+import { processMessage } from "./processMessage.js";
 
 const mqttClient = initializeMQTTClient(async (topic, message) => {
-  processMessage(topic, message);
+  processMessage(topic, message, writeToDynamoDB);
 });
-
-async function processMessage(topic, message) {
-  try {
-    const payload = JSON.parse(message);
-    const entries = prepareDBEntries(topic, payload);
-
-    const entriesWithoutDuplicated = entries.filter(
-      (entry) => !isDuplicate(entry.deviceId, entry),
-    );
-
-    if (entriesWithoutDuplicated.length) {
-      await writeToDynamoDB(entriesWithoutDuplicated);
-      console.log("Data written to DynamoDB for topic:", topic);
-    }
-  } catch (err) {
-    console.error("Error processing message:", err);
-  }
-}
 
 process.on("SIGTERM", () => {
   console.log("Service shutting down...");
