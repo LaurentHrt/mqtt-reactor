@@ -1,8 +1,9 @@
 import { prepareDBEntries } from "./prepareDBEntries.js";
 import { isDuplicate } from "./deduplication.js";
 
-export async function processMessage(topic, message, writeToDB) {
+export async function processMessage(topic, messageBuffer, writeToDB) {
   try {
+    const message = messageBuffer.toString();
     const payload = JSON.parse(message);
     const entries = prepareDBEntries(topic, payload);
 
