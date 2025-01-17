@@ -1,3 +1,5 @@
+import { isDuplicate } from "./deduplication.js";
+
 export function prepareDBEntries(topic, payload) {
   const topicElements = topic.split("/");
   if (topicElements.length !== 5) {
@@ -60,5 +62,9 @@ export function prepareDBEntries(topic, payload) {
     });
   }
 
-  return entries;
+  const entriesWithoutDuplicated = entries.filter(
+    (entry) => !isDuplicate(entry.deviceId, entry),
+  );
+
+  return entriesWithoutDuplicated;
 }

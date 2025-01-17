@@ -1,14 +1,17 @@
 import { initializeMQTTClient } from "./mqtt.js";
-import { writeToDynamoDB } from "./dynamodb.js";
+import { initializeDynamoDB } from "./dynamodb.js";
 import { processMessage } from "./processMessage.js";
 import { connect } from "mqtt";
 import config from "./config.js";
+import { prepareDBEntries } from "./prepareDBEntries.js";
+
+const dynamoDBClient = initializeDynamoDB(config);
 
 const mqttClient = initializeMQTTClient(
   config,
   connect,
   async (topic, message) => {
-    processMessage(topic, message, writeToDynamoDB);
+    processMessage(topic, message, prepareDBEntries, dynamoDBClient.write);
   },
 );
 
