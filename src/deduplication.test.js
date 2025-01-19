@@ -11,6 +11,16 @@ test("A button is never considered duplicate", () => {
   expect(result3).toBe(false);
 });
 
+test("A presence is never considered duplicate", () => {
+  const result = isDuplicate("test/presence/test", '{"occupancy": true}');
+  const result2 = isDuplicate("test/presence/test", '{"occupancy": true}');
+  const result3 = isDuplicate("test/presence/test", '{"occupancy": true}');
+
+  expect(result).toBe(false);
+  expect(result2).toBe(false);
+  expect(result3).toBe(false);
+});
+
 test("Simple duplicate", () => {
   const result = isDuplicate("test/device/test", '{"value": 1}');
   const result2 = isDuplicate("test/device/test", '{"value": 1}');
