@@ -20,7 +20,7 @@ export function initializeDynamoDB(config) {
           .send(
             new PutCommand({
               TableName: tableName,
-              Item: { ...item, timestamp: new Date().toISOString() },
+              Item: { timestamp: new Date().toISOString(), ...item },
             }),
           )
           .then(() =>
