@@ -1,5 +1,5 @@
 export function initializeMQTTClient(config, connect, onMessage) {
-  const { host, port, username, topic } = config.mqtt;
+  const { host, port, username, topics } = config.mqtt;
   const mqttClient = connect(`mqtt://${host}:${port}`, {
     username,
   });
@@ -14,11 +14,11 @@ export function initializeMQTTClient(config, connect, onMessage) {
     console.error("MQTT error:", err);
   });
 
-  mqttClient.subscribe(topic, (err) => {
+  mqttClient.subscribe(topics, (err) => {
     if (err) {
-      console.error("Failed to subscribe to MQTT topic:", err);
+      console.error("Failed to subscribe to MQTT topics:", err);
     } else {
-      console.log(`Subscribed to MQTT topic: ${topic}`);
+      console.log(`Subscribed to MQTT topics: ${topics}`);
     }
   });
 

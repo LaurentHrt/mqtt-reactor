@@ -9,7 +9,8 @@ const config = {
     host: process.env.MQTT_HOST || "localhost",
     port: process.env.MQTT_PORT || 1883,
     username: process.env.MQTT_USERNAME || "mosquitto",
-    topic: process.env.MQTT_TOPIC || "zigbee2mqtt/home/#",
+    topics:
+      process.env.MQTT_TOPICS.split(",") || "zigbee2mqtt/home/#".split(","),
   },
 };
 

@@ -20,7 +20,7 @@ describe("mqtt", () => {
       host: "myHost",
       port: 1884,
       username: "myUser",
-      topic: "myTopic",
+      topics: ["myTopic"],
     },
   };
 
@@ -64,7 +64,7 @@ describe("mqtt", () => {
     );
     expect(mqttClient.subscribe).toHaveBeenCalledOnce();
     expect(mqttClient.subscribe).toHaveBeenCalledWith(
-      config.mqtt.topic,
+      config.mqtt.topics,
       expect.any(Function),
     );
   });
