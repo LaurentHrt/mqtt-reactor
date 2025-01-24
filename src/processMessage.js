@@ -1,13 +1,13 @@
 export async function processMessage(
   topic,
   messageBuffer,
-  prepareEntries,
+  processEntries,
   onMessage,
 ) {
   try {
     const message = messageBuffer.toString();
     const payload = JSON.parse(message);
-    const entries = prepareEntries(topic, payload);
+    const entries = processEntries(topic, payload);
 
     if (entries.length) {
       await onMessage(entries);
