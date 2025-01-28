@@ -1,11 +1,11 @@
 import { initializeMQTTClient } from "./mqtt.js";
-import { initializeDynamoDB } from "./dynamodb.js";
 import { processMessage } from "./processMessage.js";
 import { connect } from "mqtt";
 import config from "./config.js";
 import { selectEntryStrategy } from "./selectEntryStrategy.js";
+import { selectDBStrategy } from "./selectDBStrategy.js";
 
-const dynamoDBClient = initializeDynamoDB(config);
+const dbStrategy = await selectDBStrategy();
 
 const mqttClient = initializeMQTTClient(
   config,
@@ -15,13 +15,17 @@ const mqttClient = initializeMQTTClient(
       topic,
       message,
       selectEntryStrategy(topic),
-      dynamoDBClient.write,
+      dbStrategy.write,
     );
   },
 );
 
-process.on("SIGTERM", () => {
+function shutDown() {
   console.log("Service shutting down...");
+  dbStrategy.end();
   mqttClient.end();
   process.exit(0);
-});
+}
+
+process.on("SIGTERM", shutDown);
+process.on("SIGINT", shutDown);

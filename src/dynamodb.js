@@ -1,8 +1,9 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { fromSSO } from "@aws-sdk/credential-providers";
 import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import config from "./config.js";
 
-export function initializeDynamoDB(config) {
+export function initializeDynamoDB() {
   const { awsRegion, ssoProfile, useSSO, tableName } = config;
   const awsConfig = {
     region: awsRegion,
@@ -33,5 +34,11 @@ export function initializeDynamoDB(config) {
     }
   }
 
-  return { write };
+  function end() {
+    dynamoDBClient.destroy();
+  }
+
+  console.log("DynamoDBClient initialized");
+
+  return { write, end };
 }
