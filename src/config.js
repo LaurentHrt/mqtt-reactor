@@ -1,5 +1,3 @@
-import "dotenv/config";
-
 const config = {
   useSSO: process.env.USE_SSO === "true",
   ssoProfile: process.env.SSO_PROFILE || "",
