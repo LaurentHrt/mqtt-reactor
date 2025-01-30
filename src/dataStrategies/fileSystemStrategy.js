@@ -1,5 +1,5 @@
 import * as fs from "node:fs/promises";
-import config from "./config.js";
+import config from "../config.js";
 import { resolve } from "node:path";
 
 export async function initializeFileSystem() {

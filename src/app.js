@@ -2,8 +2,8 @@ import { initializeMQTTClient } from "./mqtt.js";
 import { processMessage } from "./processMessage.js";
 import { connect } from "mqtt";
 import config from "./config.js";
-import { selectEntryStrategy } from "./selectEntryStrategy.js";
-import { selectDBStrategy } from "./selectDBStrategy.js";
+import { selectEntryStrategy } from "./entryStrategies/selectEntryStrategy.js";
+import { selectDBStrategy } from "./dataStrategies/selectDBStrategy.js";
 
 const dbStrategy = await selectDBStrategy();
 

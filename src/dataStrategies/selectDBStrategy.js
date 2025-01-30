@@ -1,6 +1,6 @@
-import { initializeDynamoDB } from "./dynamodb.js";
-import { initializeFileSystem } from "./fileSystem.js";
-import config from "./config.js";
+import { initializeDynamoDB } from "./dynamoDBStrategy.js";
+import { initializeFileSystem } from "./fileSystemStrategy.js";
+import config from "../config.js";
 
 const DB_STRATEGY = Object.freeze({
   FS: "filesystem",

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { zigbeeStrategy } from "./zigbeeStrategy";
+import { zigbeeStrategy } from "./zigbeeStrategy.js";
 
 describe("zigbeeStrategy", () => {
   it("should handle a single standard topic correctly", () => {

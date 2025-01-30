@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { pingStrategy } from "./pingStrategy";
+import { pingStrategy } from "./pingStrategy.js";
 
 describe("pingStrategy", () => {
   it("should handle a single standard topic correctly", () => {
