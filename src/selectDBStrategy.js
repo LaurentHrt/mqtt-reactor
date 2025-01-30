@@ -11,6 +11,7 @@ const DB_STRATEGY = Object.freeze({
 export async function selectDBStrategy() {
   const strategy = config.dbStrategy;
   console.log("Selecting DB strategy:", strategy);
+  console.log(config.dbStrategy);
 
   if (strategy === DB_STRATEGY.DynamoDB) {
     return initializeDynamoDB();
