@@ -4,7 +4,7 @@ import { processMessage } from "./processMessage.js";
 
 let dbStrategy;
 
-export const saveStrat = {
+export const saveStrategy = {
   init: async () => {
     dbStrategy = await selectDBStrategy();
     console.log("SaveStrategy initialized");

@@ -1,13 +1,28 @@
 import { initializeMQTTClient } from "./mqtt.js";
 import { connect } from "mqtt";
 import config from "./config.js";
-import { saveStrat } from "./onMessageStrategies/saveStrategy/saveStrategy.js";
+import { logStrategy } from "./onMessageStrategies/logStrategy/logStrategy.js";
+import { saveStrategy } from "./onMessageStrategies/saveStrategy/saveStrategy.js";
 
 console.log("Starting service...");
 
+const availableStrategies = {
+  logStrategy,
+  saveStrategy,
+};
+
+const strategyNames = config.onMessageStrategies;
+const onMessageStrategies = strategyNames
+  .map((name) => availableStrategies[name])
+  .filter(Boolean);
+
+if (onMessageStrategies.length === 0) {
+  console.log("No available strategies");
+  process.exit(0);
+}
+
 const mqttClient = initializeMQTTClient(config, connect);
 
-const onMessageStrategies = [saveStrat];
 for (const strategy of onMessageStrategies) {
   strategy.init();
   mqttClient.on("message", strategy.onMessage);

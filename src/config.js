@@ -8,8 +8,9 @@ const config = {
     port: process.env.MQTT_PORT || 1883,
     username: process.env.MQTT_USERNAME || "mosquitto",
     topics:
-      process.env.MQTT_TOPICS.split(",") || "zigbee2mqtt/home/#".split(","),
+      process.env.MQTT_TOPICS?.split(",") || "zigbee2mqtt/home/#".split(","),
   },
+  onMessageStrategies: process.env.ON_MESSAGE_STRATEGIES.split(",") || [],
   dbStrategy: process.env.DB_STRATEGY || "none",
   dbDirectory: process.env.DB_DIRECTORY || "database",
   dbFilename: process.env.DB_FILENAME || "db.txt",
