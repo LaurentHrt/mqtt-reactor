@@ -1,29 +1,25 @@
 import { initializeMQTTClient } from "./mqtt.js";
-import { processMessage } from "./processMessage.js";
 import { connect } from "mqtt";
 import config from "./config.js";
-import { selectEntryStrategy } from "./entryStrategies/selectEntryStrategy.js";
-import { selectDBStrategy } from "./dataStrategies/selectDBStrategy.js";
+import { logStrategy } from "./onMessageStrategies/logStrategy/logStrategy.js";
+import { saveStrat } from "./onMessageStrategies/saveStrategy/saveStrategy.js";
 
-const dbStrategy = await selectDBStrategy();
+console.log("Starting service...");
 
-const mqttClient = initializeMQTTClient(
-  config,
-  connect,
-  async (topic, message) => {
-    processMessage(
-      topic,
-      message,
-      selectEntryStrategy(topic),
-      dbStrategy.write,
-    );
-  },
-);
+const mqttClient = initializeMQTTClient(config, connect);
+
+const onMessageStrategies = [logStrategy, saveStrat];
+for (const strategy of onMessageStrategies) {
+  strategy.init();
+  mqttClient.on("message", strategy.onMessage);
+}
 
 function shutDown() {
   console.log("Service shutting down...");
-  dbStrategy.end();
   mqttClient.end();
+  for (const strategy of onMessageStrategies) {
+    strategy.end();
+  }
   process.exit(0);
 }
 

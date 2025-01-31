@@ -1,4 +1,4 @@
-export function initializeMQTTClient(config, connect, onMessage) {
+export function initializeMQTTClient(config, connect) {
   const { host, port, username, topics } = config.mqtt;
   const mqttClient = connect(`mqtt://${host}:${port}`, {
     username,
@@ -7,8 +7,6 @@ export function initializeMQTTClient(config, connect, onMessage) {
   mqttClient.on("connect", () => {
     console.log("Connected to MQTT broker");
   });
-
-  mqttClient.on("message", onMessage);
 
   mqttClient.on("error", (err) => {
     console.error("MQTT error:", err);

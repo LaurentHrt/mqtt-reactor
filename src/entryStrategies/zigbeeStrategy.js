@@ -1,4 +1,4 @@
-import { isDuplicate } from "../deduplication.js";
+import { isDuplicate } from "./deduplication.js";
 
 export function zigbeeStrategy(topic, payload) {
   const topicElements = topic.split("/");

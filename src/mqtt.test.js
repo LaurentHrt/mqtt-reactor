@@ -26,7 +26,7 @@ describe("mqtt", () => {
 
   beforeEach(() => {
     onMessageMock = vi.fn();
-    mqttClient = initializeMQTTClient(config, connect, onMessageMock);
+    mqttClient = initializeMQTTClient(config, connect);
   });
 
   afterEach(() => {
@@ -42,15 +42,14 @@ describe("mqtt", () => {
   });
 
   it("should call on 3 times with good parameters", () => {
-    expect(mqttClient.on).toHaveBeenCalledTimes(3);
+    expect(mqttClient.on).toHaveBeenCalledTimes(2);
     expect(mqttClient.on).toHaveBeenNthCalledWith(
       1,
       "connect",
       expect.any(Function),
     );
-    expect(mqttClient.on).toHaveBeenNthCalledWith(2, "message", onMessageMock);
     expect(mqttClient.on).toHaveBeenNthCalledWith(
-      3,
+      2,
       "error",
       expect.any(Function),
     );

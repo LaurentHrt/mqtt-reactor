@@ -1,4 +1,4 @@
-import { isDuplicate } from "../deduplication.js";
+import { isDuplicate } from "./deduplication.js";
 
 export function pingStrategy(topic, payload) {
   const topicElements = topic.split("/");
