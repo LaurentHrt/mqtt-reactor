@@ -1,14 +1,13 @@
 import { initializeMQTTClient } from "./mqtt.js";
 import { connect } from "mqtt";
 import config from "./config.js";
-import { logStrategy } from "./onMessageStrategies/logStrategy/logStrategy.js";
 import { saveStrat } from "./onMessageStrategies/saveStrategy/saveStrategy.js";
 
 console.log("Starting service...");
 
 const mqttClient = initializeMQTTClient(config, connect);
 
-const onMessageStrategies = [logStrategy, saveStrat];
+const onMessageStrategies = [saveStrat];
 for (const strategy of onMessageStrategies) {
   strategy.init();
   mqttClient.on("message", strategy.onMessage);
