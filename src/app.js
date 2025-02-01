@@ -2,13 +2,15 @@ import { initializeMQTTClient } from "./mqtt.js";
 import { connect } from "mqtt";
 import config from "./config.js";
 import { logStrategy } from "./onMessageStrategies/logStrategy/logStrategy.js";
-import { saveStrategy } from "./onMessageStrategies/saveStrategy/saveStrategy.js";
+import { dynamoDBStrategy } from "./onMessageStrategies/dynamoDBStrategy/dynamoDBStrategy.js";
+import { fileSystemStrategy } from "./onMessageStrategies/fileSystemStrategy/fileSystemStrategy.js";
 
 console.log("Starting service...");
 
 const availableStrategies = {
   logStrategy,
-  saveStrategy,
+  dynamoDBStrategy,
+  fileSystemStrategy,
 };
 
 const strategyNames = config.onMessageStrategies;
