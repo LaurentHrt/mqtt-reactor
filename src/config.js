@@ -14,6 +14,10 @@ const config = {
   dbStrategy: process.env.DB_STRATEGY || "none",
   dbDirectory: process.env.DB_DIRECTORY || "database",
   dbFilename: process.env.DB_FILENAME || "db.txt",
+  reactor: {
+    subTopic: process.env.REACTOR_SUB_TOPIC || "",
+    pubTopic: process.env.REACTOR_PUB_TOPIC || "",
+  },
 };
 
 export default config;
