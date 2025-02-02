@@ -1,12 +1,12 @@
 [Unit]
-Description=mqtt2dynamodb
+Description=mqtt-reactor
 After=network.target
 
 [Service]
-EnvironmentFile=/etc/environment.d/mqtt2dynamodb.env
+EnvironmentFile=/etc/environment.d/mqtt-reactor.env
 Type=simple
 ExecStart=npm run start
-WorkingDirectory=/home/dietpi/workspace/mqtt2dynamodb
+WorkingDirectory=/home/dietpi/workspace/mqtt-reactor
 Restart=always
 TimeoutStartSec=0
 RestartSec=10s

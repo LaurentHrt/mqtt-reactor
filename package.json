@@ -1,5 +1,5 @@
 {
-  "name": "mqtt2dynamodb",
+  "name": "mqtt-reactor",
   "version": "1.0.0",
   "main": "src/app.js",
   "scripts": {
