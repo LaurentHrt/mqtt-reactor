@@ -34,10 +34,10 @@ for (const strategy of onMessageStrategies) {
 
 function shutDown() {
   console.log("Service shutting down...");
-  mqttClient.end();
   for (const strategy of onMessageStrategies) {
     strategy.end();
   }
+  mqttClient.end();
   process.exit(0);
 }
 
