@@ -16,6 +16,7 @@ export const reactorStrategy = (mqttClient) => {
           console.log("Reactor strategy: sdb lumiere auto OFF");
           enabled = false;
         }
+        return;
       }
 
       if (!enabled) {
@@ -50,7 +51,6 @@ export const reactorStrategy = (mqttClient) => {
       console.log("Reactor strategy initialized");
     },
     end: () => {
-      mqttClient.end();
       console.log("End Reactor strategy");
     },
   };

@@ -19,6 +19,7 @@
     "mqtt": "^5.10.3"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.8",
     "vitest": "^2.1.8"
   }
 }
