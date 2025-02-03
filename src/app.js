@@ -8,7 +8,16 @@ import { reactorStrategy } from "./onMessageStrategies/reactorStrategy/reactorSt
 
 console.log("Starting service...");
 
-const mqttClient = initializeMQTTClient(config, connect);
+const mqttClient = initializeMQTTClient(connect);
+
+const topics = config.mqtt.topics;
+mqttClient.subscribe(topics, (err) => {
+  if (err) {
+    console.error("Failed to subscribe to MQTT topics:", err);
+  } else {
+    console.log(`Subscribed to MQTT topics: ${topics}`);
+  }
+});
 
 const availableStrategies = {
   logStrategy,

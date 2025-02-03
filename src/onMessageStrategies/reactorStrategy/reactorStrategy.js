@@ -1,6 +1,4 @@
-import { connect } from "mqtt";
 import config from "../../config.js";
-import { initializeMQTTClient } from "../../mqtt.js";
 
 let enabled;
 

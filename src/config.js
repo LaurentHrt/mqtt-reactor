@@ -10,7 +10,7 @@ const config = {
     topics:
       process.env.MQTT_TOPICS?.split(",") || "zigbee2mqtt/home/#".split(","),
   },
-  onMessageStrategies: process.env.ON_MESSAGE_STRATEGIES.split(",") || [],
+  onMessageStrategies: process.env.ON_MESSAGE_STRATEGIES?.split(",") || [],
   dbStrategy: process.env.DB_STRATEGY || "none",
   dbDirectory: process.env.DB_DIRECTORY || "database",
   dbFilename: process.env.DB_FILENAME || "db.txt",
