@@ -1,16 +1,16 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { fromSSO } from "@aws-sdk/credential-providers";
 import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { config } from "../../config.js";
+import { dynamoDBConfig } from "../../config.js";
 import { selectEntryStrategy } from "../../entryStrategies/selectEntryStrategy.js";
 
 let docClient;
 let dynamoDBClient;
-const { tableName } = config;
+const { tableName } = dynamoDBConfig;
 
 export const dynamoDBStrategy = {
   init: () => {
-    const { awsRegion, ssoProfile, useSSO } = config;
+    const { awsRegion, ssoProfile, useSSO } = dynamoDBConfig;
     const awsConfig = {
       region: awsRegion,
     };

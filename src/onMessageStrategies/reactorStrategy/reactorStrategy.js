@@ -1,4 +1,4 @@
-import { config } from "../../config.js";
+import { reactorConfig } from "../../config.js";
 
 let enabled;
 
@@ -6,8 +6,9 @@ export const reactorStrategy = (mqttClient) => {
   return {
     onMessage: (topic, message) => {
       const payload = JSON.parse(message.toString());
+      const { subTopic, pubTopic, pubSdbLumiereAuto } = reactorConfig;
 
-      if (topic === "mqttreactor/sdb/lumiereauto/set") {
+      if (topic === pubSdbLumiereAuto) {
         if (payload.state === "ON") {
           console.log("Reactor strategy: sdb lumiere auto ON");
           enabled = true;
@@ -23,30 +24,26 @@ export const reactorStrategy = (mqttClient) => {
         return;
       }
 
-      if (topic === config.reactor.subTopic && payload.occupancy) {
-        mqttClient.publish(
-          `${config.reactor.pubTopic}/set`,
-          '{"state_l1": "ON"}',
-        );
+      if (topic === subTopic && payload.occupancy) {
+        const payload = { state_l1: "ON" };
+        mqttClient.publish(pubTopic, JSON.stringify(payload));
       }
     },
     init: () => {
       enabled = true;
-      mqttClient.subscribe(
-        [config.reactor.subTopic, "mqttreactor/sdb/lumiereauto/set"],
-        (err) => {
-          if (err) {
-            console.error(
-              "Reactor strategy: Failed to subscribe to MQTT topics:",
-              err,
-            );
-          } else {
-            console.log(
-              `reactor strategy: Subscribed to MQTT topics: mqttreactor/sdb/lumiereauto/set,${config.reactor.subTopic}`,
-            );
-          }
-        },
-      );
+      const { subTopic, pubSdbLumiereAuto } = reactorConfig;
+      mqttClient.subscribe([subTopic, pubSdbLumiereAuto], (err) => {
+        if (err) {
+          console.error(
+            "Reactor strategy: Failed to subscribe to MQTT topics:",
+            err,
+          );
+        } else {
+          console.log(
+            `reactor strategy: Subscribed to MQTT topics: ${pubSdbLumiereAuto},${subTopic}`,
+          );
+        }
+      });
 
       console.log("Reactor strategy initialized");
     },

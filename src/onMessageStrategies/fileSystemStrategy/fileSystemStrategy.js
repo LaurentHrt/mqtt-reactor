@@ -1,5 +1,5 @@
 import * as fs from "node:fs/promises";
-import { config } from "../../config.js";
+import { fileSystemConfig } from "../../config.js";
 import { resolve } from "node:path";
 import { selectEntryStrategy } from "../../entryStrategies/selectEntryStrategy.js";
 
@@ -7,8 +7,8 @@ let file;
 
 export const fileSystemStrategy = {
   init: async () => {
-    const path = resolve(process.cwd(), config.dbDirectory);
-    const pathToFile = resolve(path, config.dbFilename);
+    const path = resolve(process.cwd(), fileSystemConfig.dbDirectory);
+    const pathToFile = resolve(path, fileSystemConfig.dbFilename);
 
     try {
       const dir = await fs.opendir(path);

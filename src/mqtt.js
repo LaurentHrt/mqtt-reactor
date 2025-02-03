@@ -1,7 +1,7 @@
-import { config } from "./config.js";
+import { mqttBrokerConfig } from "./config.js";
 
 export function initializeMQTTClient(connect) {
-  const { host, port, username } = config.mqtt;
+  const { host, port, username } = mqttBrokerConfig;
   const mqttClient = connect(`mqtt://${host}:${port}`, {
     username,
   });

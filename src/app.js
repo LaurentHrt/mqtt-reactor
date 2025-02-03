@@ -1,6 +1,6 @@
 import { initializeMQTTClient } from "./mqtt.js";
 import { connect } from "mqtt";
-import { config } from "./config.js";
+import { appConfig } from "./config.js";
 import { logStrategy } from "./onMessageStrategies/logStrategy/logStrategy.js";
 import { dynamoDBStrategy } from "./onMessageStrategies/dynamoDBStrategy/dynamoDBStrategy.js";
 import { fileSystemStrategy } from "./onMessageStrategies/fileSystemStrategy/fileSystemStrategy.js";
@@ -10,7 +10,7 @@ console.log("Starting service...");
 
 const mqttClient = initializeMQTTClient(connect);
 
-const topics = config.mqtt.topics;
+const topics = appConfig.mqttBaseTopics;
 mqttClient.subscribe(topics, (err) => {
   if (err) {
     console.error("Failed to subscribe to MQTT topics:", err);
@@ -26,7 +26,7 @@ const availableStrategies = {
   reactorStrategy: reactorStrategy(mqttClient),
 };
 
-const strategyNames = config.onMessageStrategies;
+const strategyNames = appConfig.onMessageStrategies;
 const onMessageStrategies = strategyNames
   .map((name) => availableStrategies[name])
   .filter(Boolean);

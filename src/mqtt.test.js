@@ -13,15 +13,13 @@ vi.mock("mqtt", () => {
 });
 
 vi.mock("./config.js", () => {
-  const config = {
-    mqtt: {
-      host: "myHost",
-      port: 1884,
-      username: "myUser",
-      topics: ["myTopic"],
-    },
+  const mqttBrokerConfig = {
+    host: "myHost",
+    port: 1884,
+    username: "myUser",
+    topics: ["myTopic"],
   };
-  return { config };
+  return { mqttBrokerConfig };
 });
 
 describe("mqtt", () => {
@@ -38,18 +36,15 @@ describe("mqtt", () => {
   });
 
   it("should connect to the broker", () => {
-    const config = {
-      mqtt: {
-        host: "myHost",
-        port: 1884,
-        username: "myUser",
-        topics: ["myTopic"],
-      },
+    const mqttBrokerConfig = {
+      host: "myHost",
+      port: 1884,
+      username: "myUser",
     };
-    const url = `mqtt://${config.mqtt.host}:${config.mqtt.port}`;
+    const url = `mqtt://${mqttBrokerConfig.host}:${mqttBrokerConfig.port}`;
     expect(connect).toHaveBeenCalledOnce();
     expect(connect).toHaveBeenCalledWith(url, {
-      username: config.mqtt.username,
+      username: mqttBrokerConfig.username,
     });
   });
 
