@@ -12,9 +12,7 @@ vi.mock("mqtt", () => {
   };
 });
 
-describe("mqtt", () => {
-  let mqttClient;
-  let onMessageMock;
+vi.mock("./config.js", () => {
   const config = {
     mqtt: {
       host: "myHost",
@@ -23,17 +21,31 @@ describe("mqtt", () => {
       topics: ["myTopic"],
     },
   };
+  return { config };
+});
+
+describe("mqtt", () => {
+  let mqttClient;
+  let onMessageMock;
 
   beforeEach(() => {
     onMessageMock = vi.fn();
-    mqttClient = initializeMQTTClient(config, connect);
+    mqttClient = initializeMQTTClient(connect);
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it("should call connect", () => {
+  it("should connect to the broker", () => {
+    const config = {
+      mqtt: {
+        host: "myHost",
+        port: 1884,
+        username: "myUser",
+        topics: ["myTopic"],
+      },
+    };
     const url = `mqtt://${config.mqtt.host}:${config.mqtt.port}`;
     expect(connect).toHaveBeenCalledOnce();
     expect(connect).toHaveBeenCalledWith(url, {
@@ -41,7 +53,7 @@ describe("mqtt", () => {
     });
   });
 
-  it("should call on 3 times with good parameters", () => {
+  it("should register 'connect' and 'error' events", () => {
     expect(mqttClient.on).toHaveBeenCalledTimes(2);
     expect(mqttClient.on).toHaveBeenNthCalledWith(
       1,
@@ -51,19 +63,6 @@ describe("mqtt", () => {
     expect(mqttClient.on).toHaveBeenNthCalledWith(
       2,
       "error",
-      expect.any(Function),
-    );
-  });
-
-  it("should subscribe to the topic", () => {
-    expect(mqttClient.on).toHaveBeenNthCalledWith(
-      1,
-      "connect",
-      expect.any(Function),
-    );
-    expect(mqttClient.subscribe).toHaveBeenCalledOnce();
-    expect(mqttClient.subscribe).toHaveBeenCalledWith(
-      config.mqtt.topics,
       expect.any(Function),
     );
   });

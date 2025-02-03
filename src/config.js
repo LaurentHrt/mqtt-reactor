@@ -1,4 +1,4 @@
-const config = {
+export const config = {
   useSSO: process.env.USE_SSO === "true",
   ssoProfile: process.env.SSO_PROFILE || "",
   awsRegion: "eu-west-3",
@@ -19,5 +19,3 @@ const config = {
     pubTopic: process.env.REACTOR_PUB_TOPIC || "",
   },
 };
-
-export default config;

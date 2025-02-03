@@ -1,6 +1,6 @@
 import { initializeMQTTClient } from "./mqtt.js";
 import { connect } from "mqtt";
-import config from "./config.js";
+import { config } from "./config.js";
 import { logStrategy } from "./onMessageStrategies/logStrategy/logStrategy.js";
 import { dynamoDBStrategy } from "./onMessageStrategies/dynamoDBStrategy/dynamoDBStrategy.js";
 import { fileSystemStrategy } from "./onMessageStrategies/fileSystemStrategy/fileSystemStrategy.js";
@@ -14,9 +14,9 @@ const topics = config.mqtt.topics;
 mqttClient.subscribe(topics, (err) => {
   if (err) {
     console.error("Failed to subscribe to MQTT topics:", err);
-  } else {
-    console.log(`Subscribed to MQTT topics: ${topics}`);
+    return;
   }
+  console.log(`Subscribed to MQTT topics: ${topics}`);
 });
 
 const availableStrategies = {
