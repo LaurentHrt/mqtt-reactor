@@ -6,7 +6,8 @@
     "sdb-lumiere-auto": "node --env-file=.prod.env src/pub-service.js",
     "start:dev": "node --watch --env-file=.dev.env src/app.js",
     "start": "node --env-file=.prod.env src/app.js",
-    "test": "vitest"
+    "test:watch": "vitest",
+    "test": "vitest run"
   },
   "author": "",
   "license": "ISC",
