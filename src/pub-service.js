@@ -1,18 +1,12 @@
 import { initializeMQTTClient } from "./mqtt.js";
 import { connect } from "mqtt";
-import { reactorConfig } from "./config.js";
 
 const mqttClient = initializeMQTTClient(connect);
 
-const state = process.argv[2] || "";
+const topic = process.argv[2] || "";
+const payload = process.argv[3] || "";
 
-if (state !== "ON" && state !== "OFF") {
+mqttClient.publishAsync(topic, payload).then(() => {
+  mqttClient.end();
   process.exit(0);
-}
-
-mqttClient
-  .publishAsync(reactorConfig.pubSdbLumiereAuto, `{"state": "${state}"}`)
-  .then(() => {
-    mqttClient.end();
-    process.exit(0);
-  });
+});
