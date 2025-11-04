@@ -18,9 +18,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "ssh $USER@$HOST -i $KEY_PATH"
+echo "ssh $USER@$HOST -i $SSH_KEY_PATH"
 
-ssh $USER@$HOST -i $KEY_PATH << EOF
+ssh $USER@$HOST -i $SSH_KEY_PATH <<EOF
   set -e
 
   cd $APP_DIR
