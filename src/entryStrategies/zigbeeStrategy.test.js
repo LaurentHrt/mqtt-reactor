@@ -1,5 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { zigbeeStrategy } from "./zigbeeStrategy.js";
+
+vi.mock("../config.js", () => {
+  const zigbeeStrategyConfig = {
+    deviceKeys: ["temperature","humidity","energy","state","occupancy","current","power","moving","position","action","status","pilot_wire_mode"],
+  };
+  return { zigbeeStrategyConfig };
+});
 
 describe("zigbeeStrategy", () => {
   it("should handle a single standard topic correctly", () => {

@@ -27,3 +27,7 @@ export const reactorConfig = {
   pubTopic: process.env.REACTOR_PUB_TOPIC || "",
   pubSdbLumiereAuto: process.env.REACTOR_PUB_SDB_LUMIEREAUTO || "",
 };
+
+export const zigbeeStrategyConfig = {
+  deviceKeys: process.env.DEVICE_KEYS.split(',').map(k => k.trim()) || []
+}

@@ -1,3 +1,4 @@
+import { zigbeeStrategyConfig } from "../config.js";
 import { isDuplicate } from "./deduplication.js";
 
 export function zigbeeStrategy(topic, payload) {
@@ -12,19 +13,8 @@ export function zigbeeStrategy(topic, payload) {
 
   // Remove null  and undefined values
   const commonData = Object.fromEntries(
-    Object.entries({
-      temperature: payload.temperature,
-      humidity: payload.humidity,
-      energy: payload.energy,
-      state: payload.state,
-      occupancy: payload.occupancy,
-      current: payload.current,
-      power: payload.power,
-      moving: payload.moving,
-      position: payload.position,
-      action: payload.action,
-      status: payload.status,
-    }).filter(([_, value]) => value !== null && value !== undefined),
+    Object.entries(payload)
+      .filter(([key, value]) => zigbeeStrategyConfig.deviceKeys.includes(key) && value != null)
   );
 
   if (topic === "zigbee2mqtt/home/sdb/lumiere/dual") {
