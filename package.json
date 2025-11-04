@@ -18,7 +18,7 @@
     "@aws-sdk/client-dynamodb": "^3.826.0",
     "@aws-sdk/credential-providers": "^3.826.0",
     "@aws-sdk/lib-dynamodb": "^3.826.0",
-    "mqtt": "^5.13.1"
+    "mqtt": "^5.14.1"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^3.0.5",
