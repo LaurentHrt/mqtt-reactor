@@ -1,5 +1,5 @@
 node_modules/
 database/
 *.env
-!.example.env
+!.example.*
 coverage/
