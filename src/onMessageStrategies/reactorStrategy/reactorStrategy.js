@@ -25,7 +25,7 @@ export const reactorStrategy = (mqttClient) => {
       }
 
       if (topic === subTopic && payload.occupancy) {
-        const payload = { state_l1: "ON" };
+        const payload = { state_l2: "ON" };
         mqttClient.publish(pubTopic, JSON.stringify(payload));
       }
     },
